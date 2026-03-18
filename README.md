@@ -11,5 +11,5 @@
 - [Pinterest](https://nz.pinterest.com/)
 - [GetEmoji](https://getemoji.com/)
 
-# *My chosen meme*
+## *My chosen meme*
 A meme that captures how I currently feel about my university studies is ![](https://media1.tenor.com/m/z0lyyIDFTsMAAAAd/learning-studying.gif)
