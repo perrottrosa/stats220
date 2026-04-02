@@ -1,0 +1,159 @@
+---
+title: "My dynamic report"
+output: html_fragment
+---
+## Analysis of lecture attendance, engagement and duration
+This report analyses lecture engagement based on lecture duration and attendance type. 
+
+## variables
+
+ - **lecture attendance type**: how the lecture was attended e.g. online(recording) or in-person  attendance. 
+ - **lecture engagement**: how engaging the lecture was, using an engagement score from 1(not engaging) to 5(very engaging). 
+ - **lecture duration**: how long the lecture was (measured in hours)
+ 
+## This report aims to
+ 
+ - analyse how engagement levels differed across attendance types e.g. does engagement vary depending on whether the lecture was attended in-person or online?
+ - analyse distribution of attendance modes 
+ - analyses distribution of lecture duration (hours)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
+library(tidyverse)
+
+```
+
+```{r}
+logged_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vRFsCrKJ-8u7E1N8f9triPoKcm-ACK3IsJOKvVY3V4mvby5FgKeSzpLB8wJOOTxHqpWGEDpRpI_QDi6/pub?output=csv", show_col_types = FALSE)
+
+latest_data <- logged_data %>%
+  rename(
+    timestamp = Timestamp,
+    lecture_hours = `How long was the lecture? (hours)`,
+    attendance_mode = `How did you attend the lecture?`,
+    engagement = `How engaging was the lecture?`
+  )
+
+latest_data$engagement <- as.factor(latest_data$engagement)
+```
+
+
+This section is a summary of the minimum, maximum and mean duration of lectures. This section analyses how engagement differs across attendance modes, which provides a mean engagement level for each mode of attendance. 
+```{r}
+# summary values 
+paste("Min hours:", round(min(latest_data$lecture_hours, na.rm = TRUE), 2),
+      "| Max hours:", round(max(latest_data$lecture_hours, na.rm = TRUE), 2),
+      "| Mean hours:", round(mean(latest_data$lecture_hours, na.rm = TRUE), 2))
+
+# mean engagement level
+paste("Mean engagement:", round(mean(as.numeric(latest_data$engagement), na.rm = TRUE), 2))
+
+latest_data %>%
+  group_by(attendance_mode) %>%
+  summarise(mean_engagement = round(mean(as.numeric(engagement), na.rm = TRUE), 2)) %>%
+  mutate(comment = paste(attendance_mode, "had a mean engagement of", mean_engagement)) %>%
+  pull(comment)
+```
+
+
+Graph 1 displays the distribution of lectures attended in-person and lecture recordings watched online. 
+
+```{r}
+# lecture attendance plot - plot 1
+latest_data %>%
+  ggplot() +
+  geom_bar(aes(y = attendance_mode, fill = attendance_mode)) +
+  labs(
+    title = "How the Lecture was Attended",
+    x = "Number of Lectures",
+    y = "Attendance Mode",
+    fill = "Attendance Mode",
+    caption = "Source: STATS 220 survey")
+```
+
+
+Graph 2 displays the distribution of engagement levels, ranging from 1 to 5. 
+
+```{r}
+# lecture engagement plot - plot 2
+latest_data %>%
+  ggplot() +
+  geom_bar(aes(y = engagement, fill = as.factor(engagement))) +
+  labs(
+    title = "How Engaging was the Lecture?",
+    x = "Number of Lectures",
+    y = "Engagement Level",
+    fill = "Engagement Level",
+    caption = "Source: STATS 220 survey")
+```
+
+
+Graph 3 displays the relationship between engagement and attendance mode. 
+The figure exhibits how engagement differs based on whether the lecture was attended in-person or watched online. 
+
+```{r}
+# engagement based on attendance plot - plot 3
+latest_data$engagement <- as.factor(latest_data$engagement)
+latest_data %>%
+  ggplot(aes(x = attendance_mode, fill = engagement)) +
+  geom_bar() +
+  labs(
+    title = "Engagement level by Attendance Mode",
+    x = "Attendance mode",
+    y = "Number of lectures",
+    fill = "Engagement level",
+    caption = "Source: STATS 220 survey")
+```
+
+
+```{css}
+body {
+  font-family: Courier, sans-serif;
+  background-color: #FFFFC5;
+}
+```
+
+## What's going on with this data?
+
+This section is an analysis of mean length duration (measured in hours) and mean levels of engagement, measured on a scale from 1 - least engagement, to 5 - most engagement.
+```{r}
+paste(
+  "The mean lecture duration was",
+  round(mean(latest_data$lecture_hours, na.rm = TRUE), 2),
+  "hours and the mean level of engagement was",
+  round(mean(as.numeric(latest_data$engagement), na.rm = TRUE), 2)
+)
+```
+
+
+This section is an analysis of the minimum and maximum lecture duration (in hours). 
+
+```{r}
+latest_data %>%
+  summarise(
+    min_hours = min(lecture_hours, na.rm = TRUE),
+    max_hours = max(lecture_hours, na.rm = TRUE)
+  ) %>%
+  mutate(
+    comment = paste(
+      "Lecture duration ranged from",
+      round(min_hours, 2),
+      "to",
+      round(max_hours, 2),
+      "hours."
+    )
+  ) %>%
+  pull(comment)
+```
+
+
+This section displays a comparison between mean engagement levels for in-person lecture attendance and online lecture attendance.
+
+```{r}
+latest_data %>%
+  group_by(attendance_mode) %>%
+  summarise(
+    mean_engagement = round(mean(as.numeric(engagement), na.rm = TRUE), 2)
+  ) %>%
+  mutate(comment = paste(attendance_mode, "had a mean engagement of", mean_engagement)) %>%
+  pull(comment)
+```
