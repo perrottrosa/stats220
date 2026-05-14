@@ -1,0 +1,74 @@
+---
+title: Lecture Engagement Colour Symbolism Story
+output: html_document
+---
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
+```
+
+```{js}
+$(function() {
+  $(".level2").css('visibility', 'hidden');
+  $(".level2").first().css('visibility', 'visible');
+  $(".container-fluid").height($(".container-fluid").height() + 300);
+  $(window).on('scroll', function() {
+    $('h2').each(function() {
+      var h2Top = $(this).offset().top - $(window).scrollTop();
+      var windowHeight = $(window).height();
+      if (h2Top >= 0 && h2Top <= windowHeight / 2) {
+        $(this).parent('div').css('visibility', 'visible');
+      } else if (h2Top > windowHeight / 2) {
+        $(this).parent('div').css('visibility', 'hidden');
+      }
+    });
+  });
+})
+```
+
+```{css echo = FALSE}
+.figcaption {display: none}
+body {
+  background-color: ##FFFFFF;
+  color: #FFA500;
+}
+
+h1, h2, h3 {
+  color: #FFA500;
+}
+
+a {
+  color: #FF0000;
+}
+
+code {
+  color: #008000;
+}
+```
+## Introduction 
+
+my visualizations show my lecture engagement across different attendance types, lecture time of day and how content heavy the class was perceived to be. different colours were intentionally used as a way to understand behavioural patterns and these colour choices were used consistently.
+
+## Plot 1: Attendance Type versus Lecture Engagement
+![Attendance Type versus Lecture Engagemet. the green component of the graph exhibits in-person attendance. the orange component of the graph represents online (live) attendance. the red component represents online (recording) attendance.](plot1.png) 
+The green component of the graph represents highest engagement levels. the orange compoenent of the graph represents online (live) attendance and sits between the two extremes, where engagement levels were lower than in-person attendance but higher than online (recording) attendance which is represented by the red component of the graph. the red component exhibits lowest engagement levels. therefore the graph shows that engagement levels are highest when lectures are attended in person.  
+
+
+## Plot 2: Lecture Engagement by Time of Day
+![Plot 2: Lecture engagement by time of day. the plot shows the engagement levels for morning lectures compared to evening lectures.](plot2.png)
+the green component of the graph represents engagement levels during evening lectures, while the red component of the graph represents engagement levels during morning lectures. the green component represents a much larger number of lectures attended, and exceeds the engagement levels of the red component. therefore the graph shows that engagement levels are highest when the lecture is in the morning compared to when the lecture is in the evening. 
+
+
+## Plot 3: Percieved Content Heaviness versus Engagement
+![Plot 3: Content heaviness vs engagement. the plot exhibits the engagement levels across attendance types and percieved content heaviness ](plot3.png)
+the green component of the graph represents in-person attendance, where engagement is highest and percieved content heaviness is greatest. the orange component represents online (live) lecture attendance where engagement levels sit between in-person and online (recording) attendance, and perceived content heaviness. the red component of the graph represents online (recording) attendance, where engagement levels are lowest and percieved content heaviness is lowest. the graph therefore shows that engagement levels are highest when the lecture is attended in person and its a content heavy lecture, and lowest when the lecture is watched online and is a low content lecture. 
+
+
+
+
+
+
+
+
